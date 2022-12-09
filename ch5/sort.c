@@ -11,9 +11,10 @@ void writelines(char *lineptr[], int nlines);
 
 void qsort(char *lineptr[], int left, int right);
 
-main() {
+int main() {
   int nlines;
   if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
+    writelines(lineptr, nlines);
     qsort(lineptr, 0, nlines - 1);
     writelines(lineptr, nlines);
     return 0;
@@ -25,10 +26,7 @@ main() {
 
 #define MAXLEN 1000    // 每行的最大长度
 
-int getline(char s[], int lim);
-
-
-int getline(char s[], int lim) {
+int mygetline(char s[], int lim) {
   int c, i;
   for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; i++) {
     s[i] = c;
@@ -63,13 +61,14 @@ int readlines(char *lineptr[], int maxlines) {
   int len, nlines;
   char *p, line[MAXLEN];
   nlines = 0;
-  while((len = getline(line, MAXLEN)) > 0) {
+  while((len = mygetline(line, MAXLEN)) > 1) {
     if (nlines >= MAXLINES || (p = alloc(len)) == NULL) {
       return -1;
     } else {
       line[len-1] = '\0';
       strcpy(p, line);
       lineptr[nlines++] = p;
+      // printf("debug2\n");
     }
   }
   return nlines;
